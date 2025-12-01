@@ -1,0 +1,33 @@
+stages:
+  - build
+  - test
+  - deploy
+
+# Build Stage
+build-job:
+  stage: build
+  image: maven:3.9.6-eclipse-temurin-17
+  script:
+    - echo "🔧 Building the Maven project..."
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 week
+
+# Test Stage
+test-job:
+  stage: test
+  image: maven:3.9.6-eclipse-temurin-17
+  script:
+    - echo "🧪 Running tests..."
+    - mvn test
+
+# Deploy Stage (for testing only)
+deploy-job:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "🚀 Simulating deployment..."
+    - echo "Build artifact successfully deployed!"
+  when: on_success
